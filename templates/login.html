@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login - Smart Appliances</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background: linear-gradient(135deg,#1e1e2f,#2c3e50);
+}
+
+/* MAIN BOX */
+
+.container{
+display:flex;
+width:750px;
+height:450px;
+background:white;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* LEFT SIDE */
+
+.left{
+flex:1;
+background:url('/static/taranga123.png');
+background-size:cover;
+background-position:center;
+position:relative;
+}
+
+.left::after{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+}
+
+.left-text{
+position:absolute;
+bottom:30px;
+left:20px;
+color:white;
+z-index:1;
+}
+
+.left-text h2{
+font-size:26px;
+}
+
+.left-text p{
+font-size:14px;
+color:#ddd;
+}
+
+/* RIGHT SIDE */
+
+.right{
+flex:1;
+display:flex;
+flex-direction:column;
+justify-content:center;
+padding:40px;
+}
+
+.right h2{
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:6px;
+outline:none;
+transition:0.3s;
+}
+
+input:focus{
+border-color:#ff9900;
+}
+
+input.field-error{
+border-color:#ff4d4d;
+background:#fff5f5;
+}
+
+.field-message{
+display:none;
+color:#ff4d4d;
+font-size:12px;
+font-weight:bold;
+margin:-4px 0 6px;
+}
+
+.field-message.show{
+display:block;
+}
+
+/* 🔥 PASSWORD BOX */
+
+.password-box{
+position:relative;
+}
+
+.password-box input{
+padding-right:40px;
+}
+
+.toggle-eye{
+position:absolute;
+right:10px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+font-size:18px;
+color:#555;
+}
+
+/* BUTTON */
+
+button{
+margin-top:10px;
+padding:12px;
+background:#ff9900;
+border:none;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#ffb84d;
+}
+
+.error{
+color:red;
+margin-top:10px;
+font-size:14px;
+}
+
+.register{
+margin-top:15px;
+font-size:14px;
+}
+
+.register a{
+color:#ff9900;
+text-decoration:none;
+font-weight:bold;
+}
+
+.register a:hover{
+text-decoration:underline;
+}
+
+/* 🔥 FORGOT PASSWORD */
+
+.forgot{
+text-align:right;
+margin-top:-5px;
+margin-bottom:10px;
+}
+
+.forgot a{
+color:#ff9900;
+text-decoration:none;
+font-size:13px;
+}
+
+.forgot a:hover{
+text-decoration:underline;
+}
+
+/* CAPTCHA */
+
+.captcha-box{
+margin-top:10px;
+font-size:14px;
+color:#333;
+}
+
+.captcha-text{
+letter-spacing:5px;
+background:#eee;
+padding:10px;
+border-radius:6px;
+text-align:center;
+font-weight:bold;
+font-size:20px;
+margin-top:5px;
+}
+
+/* 🔙 GLOBAL NAV */
+
+.nav{
+position:fixed;
+bottom:20px;
+left:20px;
+display:flex;
+gap:10px;
+z-index:1000;
+}
+
+.nav a{
+text-decoration:none;
+padding:10px 15px;
+border-radius:6px;
+font-weight:bold;
+}
+
+.back-btn{
+background:#555;
+color:white;
+}
+
+.home-btn{
+background:#00cc66;
+color:white;
+}
+
+</style>
+
+<script>
+function validateLogin() {
+
+    let username = document.forms["loginForm"]["username"].value.trim();
+    let password = document.forms["loginForm"]["password"].value.trim();
+    let captcha = document.forms["loginForm"]["captcha"].value.trim();
+
+    let error = "";
+
+    if (username.length < 4) {
+        error = "Username must be at least 4 characters ❌";
+    }
+    else if (password.length < 6) {
+        error = "Password must be at least 6 characters ❌";
+    }
+    else if (captcha === "") {
+        error = "Please enter CAPTCHA ❌";
+    }
+
+    if (error !== "") {
+        document.getElementById("error").innerHTML = error;
+        return false;
+    }
+
+    return true;
+}
+
+/* 👁 TOGGLE PASSWORD */
+function validateLogin() {
+    clearFieldErrors();
+
+    let username = document.forms["loginForm"]["username"];
+    let password = document.forms["loginForm"]["password"];
+    let captcha = document.forms["loginForm"]["captcha"];
+
+    if (username.value.trim().length < 4) {
+        showFieldError("username", "Username must be at least 4 characters");
+        username.value = "";
+        username.focus();
+        return false;
+    }
+    else if (password.value.trim().length < 6) {
+        showFieldError("password", "Password must be at least 6 characters");
+        password.value = "";
+        password.focus();
+        return false;
+    }
+    else if (captcha.value.trim() === "") {
+        showFieldError("captcha", "Please enter CAPTCHA");
+        captcha.focus();
+        return false;
+    }
+
+    return true;
+}
+
+function showFieldError(fieldName, message) {
+    let field = document.forms["loginForm"][fieldName];
+    let messageBox = document.getElementById(fieldName + "Error");
+    field.classList.add("field-error");
+    messageBox.innerHTML = message;
+    messageBox.classList.add("show");
+}
+
+function clearFieldErrors() {
+    document.querySelectorAll(".field-error").forEach(function(field) {
+        field.classList.remove("field-error");
+    });
+    document.querySelectorAll(".field-message").forEach(function(message) {
+        message.innerHTML = "";
+        message.classList.remove("show");
+    });
+    document.getElementById("error").innerHTML = "";
+}
+
+function togglePassword() {
+    let input = document.getElementById("loginPass");
+    let eye = document.getElementById("eye");
+
+    if (input.type === "password") {
+        input.type = "text";
+        eye.innerHTML = "🙈";
+    } else {
+        input.type = "password";
+        eye.innerHTML = "👁";
+    }
+}
+</script>
+
+<link rel="stylesheet" href="/static/page-transition.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LEFT -->
+<div class="left">
+<div class="left-text">
+<h2>Welcome Back 👋</h2>
+<p>Login to manage your smart appliances</p>
+</div>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<h2>Login</h2>
+
+<form name="loginForm" method="POST" onsubmit="return validateLogin()" novalidate>
+
+<input type="text" name="username" class="{% if field_errors and field_errors.username %}field-error{% endif %}" placeholder="Username" value="{{ form_data.username if form_data else '' }}" required>
+<div id="usernameError" class="field-message {% if field_errors and field_errors.username %}show{% endif %}">{{ field_errors.username if field_errors and field_errors.username else '' }}</div>
+
+<!-- 🔥 PASSWORD WITH EYE -->
+<div class="password-box">
+    <input type="password" id="loginPass" name="password" class="{% if field_errors and field_errors.password %}field-error{% endif %}" placeholder="Password" required>
+    <span id="eye" class="toggle-eye" onclick="togglePassword()">👁</span>
+</div>
+<div id="passwordError" class="field-message {% if field_errors and field_errors.password %}show{% endif %}">{{ field_errors.password if field_errors and field_errors.password else '' }}</div>
+
+<!-- 🔥 FORGOT PASSWORD -->
+<div class="forgot">
+    <a href="/forgot_password">Forgot Password?</a>
+</div>
+
+<!-- CAPTCHA -->
+<div class="captcha-box">
+
+<p>Enter CAPTCHA:</p>
+
+<div class="captcha-text">
+    {{ captcha }}
+</div>
+
+<input type="text" name="captcha" class="{% if field_errors and field_errors.captcha %}field-error{% endif %}" placeholder="Type above text" required>
+<div id="captchaError" class="field-message {% if field_errors and field_errors.captcha %}show{% endif %}">{{ field_errors.captcha if field_errors and field_errors.captcha else '' }}</div>
+
+</div>
+
+<button type="submit">Login</button>
+
+<div id="error" class="error">{% if msg %}{{ msg }}{% endif %}</div>
+
+</form>
+
+<div class="register">
+New user? <a href="/register">Create Account</a>
+</div>
+
+</div>
+
+</div>
+
+<!-- 🔙 GLOBAL NAV -->
+<div class="nav">
+    <a href="javascript:history.back()" class="back-btn">⬅ Back</a>
+    <a href="/" class="home-btn">🏠 Home</a>
+</div>
+
+<script src="/static/page-transition.js"></script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Your Cart</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background: linear-gradient(135deg,#1e1e2f,#2c3e50);
+    color:white;
+}
+
+/* 🔙 NAV */
+.nav{
+    padding:15px;
+}
+
+.back-btn, .home-btn{
+    text-decoration:none;
+    padding:8px 14px;
+    border-radius:6px;
+    margin-right:10px;
+    font-size:14px;
+}
+
+.back-btn{
+    background:#444;
+    color:white;
+}
+
+.home-btn{
+    background:#ff9900;
+    color:black;
+}
+
+.container{
+    padding:40px;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.item{
+    display:flex;
+    align-items:center;
+    background:#111;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:10px;
+}
+
+.item img{
+    width:120px;
+    height:100px;
+    object-fit:contain;
+    background:white;
+    border-radius:6px;
+    margin-right:20px;
+}
+
+.details{
+    flex:1;
+}
+
+.details h3{
+    margin-bottom:5px;
+}
+
+.price{
+    color:#00ff99;
+    font-weight:bold;
+}
+
+.stock{
+    font-size:12px;
+    color:#ccc;
+}
+
+.qty-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.qty-btn{
+    background:#ff9900;
+    border:none;
+    padding:6px 12px;
+    cursor:pointer;
+    border-radius:5px;
+    font-weight:bold;
+    color:black;
+}
+
+.qty-btn:disabled{
+    background:#555;
+    cursor:not-allowed;
+}
+
+.qty{
+    font-size:16px;
+    min-width:20px;
+    text-align:center;
+}
+
+.remove{
+    background:#ff4d4d;
+    border:none;
+    padding:8px 12px;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+    margin-left:10px;
+}
+
+.total-box{
+    margin-top:30px;
+    padding:20px;
+    background:#000;
+    border-radius:10px;
+    text-align:center;
+}
+
+.total{
+    font-size:22px;
+    margin-bottom:10px;
+    color:#00ff99;
+}
+
+.contact{
+    font-size:16px;
+    color:#ffcc00;
+}
+
+.contact span{
+    font-weight:bold;
+    color:#fff;
+}
+
+.empty{
+    text-align:center;
+    margin-top:50px;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    margin-top:20px;
+    color:#ccc;
+    text-decoration:none;
+}
+
+.back:hover{
+    color:#fff;
+}
+
+</style>
+<link rel="stylesheet" href="/static/page-transition.css">
+</head>
+
+<body>
+
+<!-- 🔙 NAV -->
+<div class="nav">
+    <a href="javascript:history.back()" class="back-btn">⬅ Back</a>
+    <a href="/" class="home-btn">🏠 Home</a>
+</div>
+
+<div class="container">
+
+<h1>🛒 Your Cart</h1>
+
+{% if cart_items %}
+
+    {% for item in cart_items %}
+
+    <div class="item">
+
+        <!-- IMAGE SAFE -->
+        {% if item.product[9] %}
+        <img src="{{ url_for('static', filename='products/' + item.product[9]) }}">
+        {% else %}
+        <img src="/static/no-image.png">
+        {% endif %}
+
+        <div class="details">
+            <h3>{{ item.product[1] }}</h3>
+            <p>{{ item.product[2] }}</p>
+            <p class="price">₹ {{ item.product[7] }}</p>
+
+            <!-- STOCK SAFE -->
+            <p class="stock">
+                Stock left: {{ item.product[10] if item.product|length > 10 else 0 }}
+            </p>
+        </div>
+
+        <div class="qty-box">
+
+            <!-- ✅ DECREASE -->
+            <form action="/decrease/{{ item.product[0] }}" method="POST" style="display:inline;">
+                <button type="submit" class="qty-btn">−</button>
+            </form>
+
+            <div class="qty">{{ item.quantity }}</div>
+
+            <!-- ✅ INCREASE -->
+            {% if item.product|length > 10 and (item.quantity >= item.product[10] or item.product[10] == 0) %}
+                <button class="qty-btn" disabled>+</button>
+            {% else %}
+                <form action="/increase/{{ item.product[0] }}" method="POST" style="display:inline;">
+                    <button type="submit" class="qty-btn">+</button>
+                </form>
+            {% endif %}
+
+        </div>
+
+        <!-- ✅ REMOVE -->
+        <form action="/remove_from_cart/{{ item.product[0] }}" method="POST" style="display:inline;">
+            <button type="submit" class="remove">Remove</button>
+        </form>
+
+    </div>
+
+    {% endfor %}
+
+    <div class="total-box">
+        <div class="total">Total: ₹ {{ total }}</div>
+
+        <div class="contact">
+            📞 Contact <span>8861256194</span> for more information
+        </div>
+    </div>
+
+{% else %}
+
+    <div class="empty">
+        <h2>Your cart is empty 😢</h2>
+        <a href="/" class="back">⬅ Go Shopping</a>
+    </div>
+
+{% endif %}
+
+</div>
+
+<script src="/static/page-transition.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Requests</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background: linear-gradient(135deg,#1e1e2f,#2c3e50);
+    color:white;
+}
+
+.container{
+    padding:40px;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.card{
+    background:#111;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:10px;
+}
+
+.pending{ color:orange; }
+.approved{ color:#00ff99; }
+.rejected{ color:#ff4d4d; }
+
+/* NAV */
+.nav{
+    padding:15px;
+}
+
+.nav a{
+    padding:8px 14px;
+    border-radius:6px;
+    text-decoration:none;
+    margin-right:10px;
+}
+
+.back-btn{ background:#444; color:white; }
+.home-btn{ background:#ff9900; color:black; }
+
+</style>
+<link rel="stylesheet" href="/static/page-transition.css">
+</head>
+
+<body>
+
+<div class="nav">
+    <a href="javascript:history.back()" class="back-btn">⬅ Back</a>
+    <a href="/" class="home-btn">🏠 Home</a>
+</div>
+
+<div class="container">
+
+<h1>📩 My Requests</h1>
+
+{% if requests %}
+
+    {% for r in requests %}
+
+    <div class="card">
+
+        <h3>{{ r[1] }}</h3>
+        <p>{{ r[2] if r[2] else "No message" }}</p>
+
+        <p>
+            Status:
+            {% if r[3] == 'Pending' %}
+                <span class="pending">Pending ⏳</span>
+            {% elif r[3] == 'Approved' %}
+                <span class="approved">Approved ✅</span>
+            {% else %}
+                <span class="rejected">Rejected ❌</span>
+            {% endif %}
+        </p>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+    <h2 style="text-align:center;">No requests yet 😢</h2>
+
+{% endif %}
+
+</div>
+
+<script src="/static/page-transition.js"></script>
+</body>
+</html>

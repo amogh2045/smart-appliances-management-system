@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ product[1] }}</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background: linear-gradient(135deg, #1e1e2f, #2c3e50);
+    color:white;
+}
+
+.container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    padding:40px;
+}
+
+.card{
+    display:flex;
+    background:#111;
+    border-radius:12px;
+    overflow:hidden;
+    width:900px;
+    max-width:95%;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+.card img{
+    width:50%;
+    height:400px;
+    object-fit:contain;
+    background:white;
+    padding:15px;
+}
+
+.details{
+    padding:30px;
+    width:50%;
+}
+
+.spec{
+    margin:8px 0;
+    color:#ccc;
+}
+
+.price{
+    margin:15px 0;
+    font-size:24px;
+    color:#00ff99;
+    font-weight:bold;
+}
+
+.btn{
+    display:inline-block;
+    padding:10px 15px;
+    background:#ff9900;
+    color:black;
+    text-decoration:none;
+    border-radius:6px;
+    margin-top:10px;
+    cursor:pointer;
+    border:none;
+}
+
+.review-box{
+    margin-top:40px;
+    width:900px;
+    max-width:95%;
+    background:#111;
+    padding:20px;
+    border-radius:12px;
+}
+
+.review{
+    border-bottom:1px solid #333;
+    padding:10px 0;
+}
+
+.stars{
+    color:gold;
+}
+
+textarea, select{
+    width:100%;
+    padding:10px;
+    border-radius:6px;
+    border:none;
+    margin-top:10px;
+}
+
+.pending{ color:orange; }
+.approved{ color:#00ff99; }
+.rejected{ color:#ff4d4d; }
+
+.nav{
+position:fixed;
+bottom:20px;
+left:20px;
+display:flex;
+gap:10px;
+}
+
+.nav a{
+text-decoration:none;
+padding:10px 15px;
+border-radius:6px;
+font-weight:bold;
+}
+
+.back-btn{ background:#555; color:white; }
+.home-btn{ background:#00cc66; color:white; }
+
+.stock{
+margin-top:8px;
+font-size:14px;
+color:#ccc;
+}
+
+</style>
+<link rel="stylesheet" href="/static/page-transition.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+{% if product[9] %}
+<img src="{{ url_for('static', filename='products/' + product[9]) }}">
+{% else %}
+<img src="/static/no-image.png">
+{% endif %}
+
+<div class="details">
+
+<h2>{{ product[1] }}</h2>
+
+<p class="spec"><strong>Category:</strong> {{ product[2] }}</p>
+<p class="spec"><strong>Brand:</strong> {{ product[3] }}</p>
+
+{% if product[2] == "Refrigerator" %}
+
+<p class="spec"><strong>Capacity:</strong> {{ product[4] }}</p>
+<p class="spec"><strong>Type:</strong> {{ product[5] }}</p>
+<p class="spec"><strong>Energy:</strong> ⭐ {{ product[6] }}</p>
+
+{% elif product[2] == "Washing Machine" %}
+
+<p class="spec"><strong>Load Capacity:</strong> {{ product[4] }}</p>
+<p class="spec"><strong>Machine Type:</strong> {{ product[5] }}</p>
+<p class="spec"><strong>Energy Rating:</strong> ⭐ {{ product[6] }}</p>
+
+{% elif product[2] == "AC" %}
+
+<p class="spec"><strong>Cooling Capacity:</strong> {{ product[4] }}</p>
+<p class="spec"><strong>AC Type:</strong> {{ product[5] }}</p>
+<p class="spec"><strong>Energy Rating:</strong> ⭐ {{ product[6] }}</p>
+
+{% elif product[2] == "TV" %}
+
+<p class="spec"><strong>Screen Size:</strong> {{ product[4] }}</p>
+<p class="spec"><strong>Display Type:</strong> {{ product[5] }}</p>
+<p class="spec"><strong>Energy Rating:</strong> {{ product[6] }}</p>
+
+{% elif product[2] == "Fan" %}
+
+<p class="spec"><strong>Spec:</strong> {{ product[4] }}</p>
+<p class="spec"><strong>Fan Type:</strong> {{ product[5] }}</p>
+<p class="spec"><strong>Energy Rating:</strong> {{ product[6] }}</p>
+
+{% elif product[2] == "Cooler" %}
+
+<p class="spec"><strong>Tank Capacity:</strong> {{ product[4] }}</p>
+<p class="spec"><strong>Cooler Type:</strong> {{ product[5] }}</p>
+<p class="spec"><strong>Power:</strong> {{ product[6] }}</p>
+
+{% elif product[2] == "Mixer" %}
+
+<p class="spec"><strong>Controls Type:</strong> {{ product[4] }}</p>
+<p class="spec"><strong>Mixer Type:</strong> {{ product[5] }}</p>
+<p class="spec"><strong>Power:</strong> {{ product[6] }}</p>
+
+{% elif product[2] == "Microwave Oven" %}
+
+<p class="spec"><strong>Oven Capacity:</strong> {{ product[4] }}</p>
+<p class="spec"><strong>Oven Type:</strong> {{ product[5] }}</p>
+<p class="spec"><strong>Power:</strong> {{ product[6] }}</p>
+
+{% else %}
+
+<p class="spec"><strong>Specification:</strong> {{ product[4] }}</p>
+<p class="spec"><strong>Type:</strong> {{ product[5] }}</p>
+<p class="spec"><strong>Energy / Power:</strong> {{ product[6] }}</p>
+
+{% endif %}
+
+<p class="price">₹ {{ product[7] }}</p>
+
+<p class="spec"><strong>Seller:</strong> {{ product[8] }}</p>
+
+<p class="stock">Stock left: {{ product[10] }}</p>
+
+<form action="/add_to_cart/{{ product[0] }}" method="POST">
+    <button class="btn">Add to Cart 🛒</button>
+</form>
+
+<br>
+
+{% if session.get('user') %}
+
+    {% if request_status %}
+        <p>
+            📩 Request Status:
+            {% if request_status == 'Pending' %}
+                <span class="pending">Pending ⏳</span>
+            {% elif request_status == 'Approved' %}
+                <span class="approved">Approved ✅</span>
+            {% else %}
+                <span class="rejected">Rejected ❌</span>
+            {% endif %}
+        </p>
+
+    {% else %}
+        <form action="/request_product/{{ product[0] }}" method="POST">
+            <textarea name="message" placeholder="Write your request..."></textarea>
+            <button class="btn" style="background:#00cc66;">Request 📩</button>
+        </form>
+    {% endif %}
+
+{% else %}
+    <a href="/login" class="btn">Login to Request</a>
+{% endif %}
+
+<hr>
+
+<h3>Delivery Status</h3>
+
+{% if session.get('user') %}
+    <p>{{ availability }}</p>
+{% else %}
+    <a href="/login" class="btn">Login to Check Availability</a>
+{% endif %}
+
+</div>
+</div>
+
+<!-- REVIEWS -->
+<div class="review-box">
+
+<h3>⭐ Customer Reviews</h3>
+
+{% if reviews %}
+    {% for r in reviews %}
+    <div class="review">
+        <strong>{{ r[1] }}</strong>
+        <div class="stars">⭐ {{ r[2] }}/5</div>
+        <p>{{ r[3] }}</p>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No reviews yet.</p>
+{% endif %}
+
+<hr>
+
+{% if session.get('user') %}
+
+<!-- 🔥 FIXED ACTION ROUTE -->
+<form action="/submit_review/{{ product[0] }}" method="POST">
+
+    <select name="rating" required>
+        <option value="">Select Rating</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="1">⭐</option>
+    </select>
+
+    <textarea name="comment" placeholder="Write your review..." required></textarea>
+
+    <button class="btn">Submit Review ⭐</button>
+
+</form>
+
+{% else %}
+<p>Login to write review</p>
+{% endif %}
+
+</div>
+
+</div>
+
+<div class="nav">
+    <a href="javascript:history.back()" class="back-btn">⬅ Back</a>
+    <a href="/" class="home-btn">🏠 Home</a>
+</div>
+
+<script src="/static/page-transition.js"></script>
+</body>
+</html>

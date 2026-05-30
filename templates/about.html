@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>About Us - Taranga Electronics</title>
+
+<style>
+
+body{
+margin:0;
+font-family:'Segoe UI', Arial;
+background: linear-gradient(135deg,#1e293b,#0f172a);
+color:white;
+}
+
+/* NAV */
+.nav{
+position:fixed;
+top:20px;
+left:20px;
+display:flex;
+gap:10px;
+}
+
+.nav a{
+text-decoration:none;
+padding:8px 14px;
+border-radius:6px;
+font-weight:bold;
+}
+
+.back{ background:#555; color:white; }
+.home{ background:#00cc66; color:white; }
+
+/* HERO */
+
+.hero{
+text-align:center;
+padding:80px 20px 40px;
+}
+
+.hero h1{
+font-size:40px;
+margin-bottom:10px;
+color:#00ffcc;
+}
+
+.hero p{
+color:#ccc;
+font-size:18px;
+}
+
+/* SECTION */
+
+.section{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:25px;
+padding:40px;
+}
+
+.card{
+background:#111;
+padding:25px;
+border-radius:12px;
+width:260px;
+text-align:center;
+box-shadow:0 5px 20px rgba(0,0,0,0.5);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h3{
+margin-bottom:10px;
+color:#00ff99;
+}
+
+/* CONTACT */
+
+.contact{
+text-align:center;
+margin:40px 0;
+}
+
+.phone{
+font-size:22px;
+color:#00ff99;
+font-weight:bold;
+}
+
+</style>
+<link rel="stylesheet" href="/static/page-transition.css">
+</head>
+
+<body>
+
+<div class="nav">
+    <a href="javascript:history.back()" class="back">⬅ Back</a>
+    <a href="/" class="home">🏠 Home</a>
+</div>
+
+<div class="hero">
+    <h1>Taranga Electronics ⚡</h1>
+    <p>Your trusted destination for smart home appliances</p>
+</div>
+
+<div class="section">
+
+<div class="card">
+<h3>✔ Trusted Brands</h3>
+<p>We offer products only from reliable and top-quality brands.</p>
+</div>
+
+<div class="card">
+<h3>🔧 After Sales Services</h3>
+<p>Quick and professional after sales services for all appliances.</p>
+</div>
+
+<div class="card">
+<h3>🏠 Demo and Installation</h3>
+<p>We install appliances safely at your doorstep.</p>
+</div>
+
+<div class="card">
+<h3>⚡ Smart Appliances</h3>
+<p>Latest technology products to upgrade your lifestyle.</p>
+</div>
+
+</div>
+
+<div class="contact">
+    <h2>📞 Contact Us</h2>
+    <p class="phone">+91 84948 91444</p>
+</div>
+
+<script src="/static/page-transition.js"></script>
+</body>
+</html>

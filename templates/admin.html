@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Login</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI', Arial, sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background: linear-gradient(135deg,#0f172a,#1e293b);
+}
+
+/* NAV */
+.nav{
+position:fixed;
+top:20px;
+left:20px;
+display:flex;
+gap:10px;
+z-index:1000;
+}
+
+.nav a{
+text-decoration:none;
+padding:8px 14px;
+border-radius:6px;
+font-size:14px;
+font-weight:bold;
+}
+
+.back-btn{
+background:#444;
+color:white;
+}
+
+.home-btn{
+background:#ff9900;
+color:black;
+}
+
+/* BOX */
+
+.login-box{
+width:350px;
+padding:40px;
+border-radius:15px;
+background: rgba(255,255,255,0.08);
+backdrop-filter: blur(15px);
+box-shadow:0 10px 40px rgba(0,0,0,0.6);
+color:white;
+text-align:center;
+}
+
+h2{
+margin-bottom:25px;
+}
+
+/* INPUT */
+
+.input-group{
+position:relative;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:8px;
+outline:none;
+background: rgba(255,255,255,0.15);
+color:white;
+}
+
+input::placeholder{
+color:#ddd;
+}
+
+/* 👁️ EYE ICON */
+.eye{
+position:absolute;
+right:12px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+font-size:16px;
+color:#ccc;
+}
+
+.eye:hover{
+color:#fff;
+}
+
+/* ERROR */
+
+input.error{
+border:2px solid #ff4d4d;
+}
+
+.error-text{
+display:none;
+color:#ff4d4d;
+font-size:13px;
+margin-top:5px;
+text-align:left;
+}
+
+.server-error{
+display:block;
+margin-bottom:12px;
+padding:10px;
+border-radius:8px;
+background:rgba(255,77,77,0.15);
+color:#ffb3b3;
+font-size:14px;
+text-align:center;
+}
+
+/* BUTTON */
+
+button{
+width:100%;
+margin-top:15px;
+padding:12px;
+background:#ff9900;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#ffb84d;
+}
+
+/* CAPTCHA */
+
+.captcha-box{
+margin-top:10px;
+text-align:left;
+}
+
+.captcha-text{
+margin-top:5px;
+background:#eee;
+color:black;
+padding:10px;
+border-radius:6px;
+text-align:center;
+letter-spacing:5px;
+font-weight:bold;
+}
+
+/* FOOTER */
+
+.footer{
+margin-top:15px;
+font-size:12px;
+color:#bbb;
+}
+
+</style>
+
+<link rel="stylesheet" href="/static/page-transition.css">
+</head>
+
+<body>
+
+<div class="nav">
+    <a href="javascript:history.back()" class="back-btn">⬅ Back</a>
+    <a href="/" class="home-btn">🏠 Home</a>
+</div>
+
+<div class="login-box">
+
+<h2>Admin Panel 🔐</h2>
+
+<form method="POST" onsubmit="return validateLogin()">
+
+{% if error %}
+<div class="server-error">{{ error }}</div>
+{% endif %}
+
+<input type="text" id="username" name="username" placeholder="Admin Username" value="{{ username if username else '' }}" required>
+<div id="userError" class="error-text">Username is required ❌</div>
+
+<!-- 🔥 PASSWORD WITH EYE -->
+<div class="input-group">
+    <input type="password" id="password" name="password" placeholder="Password" required>
+    <span class="eye" onclick="togglePassword()">👁️</span>
+</div>
+<div id="passError" class="error-text">Password is required ❌</div>
+
+<!-- CAPTCHA -->
+<div class="captcha-box">
+    <p>Enter CAPTCHA:</p>
+
+    <div id="captchaText" class="captcha-text"></div>
+
+    <input type="text" id="captchaInput" placeholder="Type above text" required>
+    <div id="captchaError" class="error-text">Wrong CAPTCHA ❌</div>
+</div>
+
+<button type="submit">Login</button>
+
+</form>
+
+<div class="footer">
+Authorized access only
+</div>
+
+</div>
+
+<script>
+
+let generatedCaptcha = "";
+
+// CAPTCHA GENERATE
+function generateCaptcha(){
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    generatedCaptcha = "";
+
+    for(let i=0;i<5;i++){
+        generatedCaptcha += chars[Math.floor(Math.random()*chars.length)];
+    }
+
+    document.getElementById("captchaText").innerText = generatedCaptcha;
+}
+
+generateCaptcha();
+
+// 👁️ TOGGLE PASSWORD
+function togglePassword(){
+    const pass = document.getElementById("password");
+
+    if(pass.type === "password"){
+        pass.type = "text";
+    } else {
+        pass.type = "password";
+    }
+}
+
+// VALIDATION
+function validateLogin(){
+
+    let valid = true;
+
+    const user = document.getElementById("username");
+    const pass = document.getElementById("password");
+    const captchaInput = document.getElementById("captchaInput");
+
+    const userError = document.getElementById("userError");
+    const passError = document.getElementById("passError");
+    const captchaError = document.getElementById("captchaError");
+
+    user.classList.remove("error");
+    pass.classList.remove("error");
+    userError.style.display = "none";
+    passError.style.display = "none";
+    captchaError.style.display = "none";
+
+    if(user.value.trim() === ""){
+        user.classList.add("error");
+        userError.style.display = "block";
+        valid = false;
+    }
+
+    if(pass.value.trim() === ""){
+        pass.classList.add("error");
+        passError.style.display = "block";
+        valid = false;
+    }
+
+    if(captchaInput.value.trim() !== generatedCaptcha){
+        captchaError.style.display = "block";
+        generateCaptcha();
+        valid = false;
+    }
+
+    return valid;
+}
+
+</script>
+
+<script src="/static/page-transition.js"></script>
+</body>
+</html>

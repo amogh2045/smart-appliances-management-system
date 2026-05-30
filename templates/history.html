@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>View History</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background: linear-gradient(135deg,#1e1e2f,#2c3e50);
+    color:white;
+}
+
+.container{
+    padding:40px;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+/* 🔥 CARD */
+.item{
+    display:flex;
+    align-items:center;
+    background:#111;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:10px;
+    transition:0.3s;
+}
+
+.item:hover{
+    transform:scale(1.01);
+}
+
+.item img{
+    width:120px;
+    height:100px;
+    object-fit:contain;
+    background:white;
+    border-radius:6px;
+    margin-right:20px;
+}
+
+.details{
+    flex:1;
+}
+
+.details h3{
+    margin-bottom:5px;
+}
+
+.price{
+    color:#00ff99;
+    font-weight:bold;
+}
+
+/* 🔥 VIEW BUTTON */
+.view-btn{
+    padding:8px 12px;
+    background:#00cc66;
+    border:none;
+    border-radius:6px;
+    color:white;
+    cursor:pointer;
+}
+
+.view-btn:hover{
+    background:#00e676;
+}
+
+/* EMPTY */
+.empty{
+    text-align:center;
+    margin-top:50px;
+}
+
+/* 🔙 GLOBAL NAV (CONSISTENT) */
+.nav{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    display:flex;
+    gap:10px;
+    z-index:1000;
+}
+
+.nav a{
+    text-decoration:none;
+    padding:10px 15px;
+    border-radius:6px;
+    font-weight:bold;
+}
+
+.back-btn{
+    background:#555;
+    color:white;
+}
+
+.home-btn{
+    background:#00cc66;
+    color:white;
+}
+
+</style>
+<link rel="stylesheet" href="/static/page-transition.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📜 Your Viewed Products</h1>
+
+{% if products %}
+
+    {% for p in products %}
+
+    <div class="item">
+
+        <img src="{{ url_for('static', filename='products/' + p[9]) }}">
+
+        <div class="details">
+            <h3>{{ p[1] }}</h3>
+            <p>{{ p[2] }}</p>
+            <p class="price">₹ {{ p[7] }}</p>
+        </div>
+
+        <!-- VIEW AGAIN -->
+        <a href="/product/{{ p[0] }}">
+            <button class="view-btn">View</button>
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+    <div class="empty">
+        <h2>No history yet 😢</h2>
+        <a href="/" style="color:#ff9900;">Start browsing →</a>
+    </div>
+
+{% endif %}
+
+</div>
+
+<!-- 🔙 GLOBAL NAV -->
+<div class="nav">
+    <a href="javascript:history.back()" class="back-btn">⬅ Back</a>
+    <a href="/" class="home-btn">🏠 Home</a>
+</div>
+
+<script src="/static/page-transition.js"></script>
+</body>
+</html>

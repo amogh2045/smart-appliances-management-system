@@ -1,0 +1,38 @@
+/* 🔥 GLOBAL STYLES */
+
+body{
+    margin:0;
+    font-family:'Segoe UI', Arial, sans-serif;
+}
+
+/* 🔥 BACK BUTTON */
+
+.back-btn{
+    display:inline-block;
+    margin-bottom:20px;
+    padding:8px 14px;
+    background:#ff9900;
+    color:black;
+    border-radius:6px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.back-btn:hover{
+    background:#ffb84d;
+}
+
+/* 🔥 COMMON BUTTON */
+
+.btn{
+    background:#ff9900;
+    border:none;
+    padding:8px 12px;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#ffb84d;
+}
