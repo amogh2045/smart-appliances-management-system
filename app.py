@@ -931,6 +931,30 @@ def submit_review(pid):
 def about():
     return render_template("about.html")
 
+
+# ---------------- HISTORY ----------------
+@app.route("/history")
+def history():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    con = sqlite3.connect("products.db")
+    cur = con.cursor()
+
+    cur.execute("""
+    SELECT DISTINCT p.*
+    FROM products p
+    JOIN user_history h ON p.id = h.product_id
+    WHERE h.username=?
+    ORDER BY h.id DESC
+    """, (session["user"],))
+
+    products = cur.fetchall()
+    con.close()
+
+    return render_template("history.html", products=products)
+
 # ---------------- RUN ----------------
 if __name__ == "__main__":
     app.run(debug=True)

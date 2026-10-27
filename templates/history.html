@@ -121,7 +121,11 @@ h1{
 
     <div class="item">
 
-        <img src="{{ url_for('static', filename='products/' + p[9]) }}">
+        {% if p[9] %}
+        <img src="{{ url_for('static', filename='products/' + p[9]) }}" alt="{{ p[1] }}">
+        {% else %}
+        <img src="/static/no-image.png" alt="No Image">
+        {% endif %}
 
         <div class="details">
             <h3>{{ p[1] }}</h3>

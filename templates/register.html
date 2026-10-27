@@ -187,40 +187,6 @@ font-weight:bold;
 
 <script>
 function validateForm() {
-
-    let username = document.forms["regForm"]["username"].value.trim();
-    let password = document.forms["regForm"]["password"].value.trim();
-    let phone = document.forms["regForm"]["phone"].value.trim();
-    let email = document.forms["regForm"]["email"].value.trim();
-
-    let error = "";
-
-    if (!/^[A-Za-z0-9]{4,20}$/.test(username)) {
-        error = "Username must be 4-20 letters/numbers";
-    }
-    else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).{6,}/.test(password)) {
-        error = "Password must contain A-Z, a-z, 0-9 & symbol";
-    }
-    else if (!/^[6-9][0-9]{9}$/.test(phone)) {
-        error = "Enter valid 10-digit phone number";
-    }
-    else if (!/^[\w\.-]+@[\w\.-]+\.\w+$/.test(email)) {
-        error = "Enter valid email address";
-    }
-    else if (document.forms["regForm"]["captcha"].value.trim() === "") {
-        error = "Please enter CAPTCHA ❌";
-    }
-
-    if (error !== "") {
-        document.getElementById("error").innerHTML = error;
-        return false;
-    }
-
-    return true;
-}
-
-/* 👁 TOGGLE PASSWORD */
-function validateForm() {
     clearFieldErrors();
 
     let username = document.forms["regForm"]["username"];

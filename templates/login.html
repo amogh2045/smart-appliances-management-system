@@ -239,33 +239,6 @@ color:white;
 
 <script>
 function validateLogin() {
-
-    let username = document.forms["loginForm"]["username"].value.trim();
-    let password = document.forms["loginForm"]["password"].value.trim();
-    let captcha = document.forms["loginForm"]["captcha"].value.trim();
-
-    let error = "";
-
-    if (username.length < 4) {
-        error = "Username must be at least 4 characters ❌";
-    }
-    else if (password.length < 6) {
-        error = "Password must be at least 6 characters ❌";
-    }
-    else if (captcha === "") {
-        error = "Please enter CAPTCHA ❌";
-    }
-
-    if (error !== "") {
-        document.getElementById("error").innerHTML = error;
-        return false;
-    }
-
-    return true;
-}
-
-/* 👁 TOGGLE PASSWORD */
-function validateLogin() {
     clearFieldErrors();
 
     let username = document.forms["loginForm"]["username"];
